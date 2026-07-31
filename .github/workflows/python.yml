@@ -9,6 +9,7 @@ on:
     paths:
       - "python/**"
       - ".github/workflows/python.yml"
+  workflow_dispatch:
 
 jobs:
   lint:
@@ -37,10 +38,15 @@ jobs:
         run: |
           pip install pytest
           find python -name "requirements.txt" -exec pip install -r {} \;
-      - name: Run tests
+      - name: Run each script's test_*.py
         run: |
-          if [ -d tests ] && find tests -name "test_*.py" | grep -q .; then
-            pytest tests
-          else
-            echo "No pytest tests found yet, skipping."
-          fi
+          fail=0
+          for t in $(find python -name 'test_*.py' | sort); do
+            echo "::group::$t"
+            if ! python3 "$t"; then
+              echo "FAILED: $t"
+              fail=1
+            fi
+            echo "::endgroup::"
+          done
+          exit "$fail"

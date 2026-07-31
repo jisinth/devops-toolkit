@@ -9,6 +9,7 @@ on:
     paths:
       - "bash/**"
       - ".github/workflows/bash.yml"
+  workflow_dispatch:
 
 jobs:
   shellcheck:
@@ -27,12 +28,16 @@ jobs:
     needs: shellcheck
     steps:
       - uses: actions/checkout@v4
-      - name: Install bats
-        run: sudo apt-get update && sudo apt-get install -y bats
-      - name: Run tests
+      - name: Run each script's test.sh
         run: |
-          if [ -d tests ] && find tests -name "*.bats" | grep -q .; then
-            bats tests
-          else
-            echo "No bats tests found yet, skipping."
-          fi
+          fail=0
+          for t in $(find bash -name 'test.sh' | sort); do
+            echo "::group::$t"
+            chmod +x "$t"
+            if ! bash "$t"; then
+              echo "FAILED: $t"
+              fail=1
+            fi
+            echo "::endgroup::"
+          done
+          exit "$fail"
