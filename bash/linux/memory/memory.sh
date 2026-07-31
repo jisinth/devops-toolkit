@@ -76,7 +76,7 @@ if command -v free >/dev/null 2>&1; then
   free -h | awk 'NR==1 || /^Swap/'
 
   # Use free -b for precise percentage math.
-  read -r _ total used free_ shared buffcache available < <(free -b | awk '/^Mem:/')
+  read -r _ total used _ _ _ _ < <(free -b | awk '/^Mem:/')
   if [ "${total:-0}" -gt 0 ]; then
     USED_PCT=$(( used * 100 / total ))
   fi

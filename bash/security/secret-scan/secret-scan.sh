@@ -93,17 +93,6 @@ PATTERN_REGEXES=(
   'bearer[[:space:]]+[A-Za-z0-9._-]{16,}'
 )
 
-build_grep_excludes() {
-  local -n arr_ref=$1
-  arr_ref=()
-  for pat in "${EXCLUDES[@]}"; do
-    arr_ref+=(--exclude-dir="$pat" --exclude="$pat")
-  done
-}
-
-grep_exclude_args=()
-build_grep_excludes grep_exclude_args
-
 # Extended regex (-E) is sufficient for all patterns here (no lookaround
 # needed), and is more portable than PCRE (-P) across grep builds.
 GREP_MODE="-E"

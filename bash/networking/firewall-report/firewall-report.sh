@@ -42,7 +42,6 @@ while [ "$#" -gt 0 ]; do
       exit 1
       ;;
   esac
-  shift
 done
 
 if command -v ufw >/dev/null 2>&1 && ufw status >/dev/null 2>&1; then

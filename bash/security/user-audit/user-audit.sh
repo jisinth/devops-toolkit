@@ -44,7 +44,6 @@ while [ "$#" -gt 0 ]; do
       exit 1
       ;;
   esac
-  shift
 done
 
 if [ ! -r /etc/passwd ]; then

@@ -134,7 +134,7 @@ if [ "$ZOMBIE_ONLY" = true ]; then
   fi
 else
   log "Process list:"
-  ps_args=(-eo pid=,ppid=,%cpu=,%mem=,user=,comm=)
+  ps_args=(-eo "pid=,ppid=,%cpu=,%mem=,user=,comm=")
   if ! ps "${ps_args[@]}" >/dev/null 2>&1; then
     err "'ps -eo ...' is not supported on this system."
     exit 1

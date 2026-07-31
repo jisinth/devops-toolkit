@@ -79,7 +79,7 @@ generate_uuid_fallback() {
 
 generate_uuid() {
   if command -v uuidgen >/dev/null 2>&1; then
-    uuidgen | tr 'A-Z' 'a-z'
+    uuidgen | tr '[:upper:]' '[:lower:]'
   else
     generate_uuid_fallback
   fi
@@ -91,7 +91,7 @@ for ((i = 0; i < COUNT; i++)); do
     u="${u//-/}"
   fi
   if [ "$UPPER" = true ]; then
-    u="$(printf '%s' "$u" | tr 'a-z' 'A-Z')"
+    u="$(printf '%s' "$u" | tr '[:lower:]' '[:upper:]')"
   fi
   printf '%s\n' "$u"
 done

@@ -124,8 +124,7 @@ while IFS=$'\t' read -r repo tag id size created; do
 done <<< "$RAW"
 
 if [ "$SORT_BY_SIZE" = true ]; then
-  IFS=$'\n' rows=($(printf '%s\n' "${rows[@]}" | sort -t $'\t' -k1,1 -rn))
-  unset IFS
+  mapfile -t rows < <(printf '%s\n' "${rows[@]}" | sort -t $'\t' -k1,1 -rn)
 fi
 
 case "$OUTPUT_FORMAT" in

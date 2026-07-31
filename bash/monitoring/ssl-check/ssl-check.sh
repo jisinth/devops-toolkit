@@ -143,7 +143,7 @@ for entry in "${DOMAINS[@]}"; do
     port="${entry#*:}"
   fi
 
-  cert=$(printf '' | timeout 10 openssl s_client -connect "${host}:${port}" -servername "$host" 2>/dev/null </dev/null | openssl x509 -noout -enddate -issuer -subject 2>/dev/null) || cert=""
+  cert=$(timeout 10 openssl s_client -connect "${host}:${port}" -servername "$host" 2>/dev/null </dev/null | openssl x509 -noout -enddate -issuer -subject 2>/dev/null) || cert=""
 
   if [ -z "$cert" ]; then
     err "${host}:${port} — could not retrieve certificate (connection failed or no cert presented)"
