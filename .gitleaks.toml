@@ -1,0 +1,11 @@
+title = "devops-toolkit gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Intentional fake secrets in this repo's own secret-scanning tool's docs and tests"
+paths = [
+  '''bash/security/secret-scan/example\.md''',
+  '''bash/security/secret-scan/test\.sh''',
+]
