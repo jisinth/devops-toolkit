@@ -65,9 +65,9 @@ log "Members of sudo/wheel group:"
 found=false
 for grp in sudo wheel; do
   if command -v getent >/dev/null 2>&1; then
-    members=$(getent group "$grp" 2>/dev/null | awk -F: '{print $4}')
+    members=$(getent group "$grp" 2>/dev/null | awk -F: '{print $4}') || true
   else
-    members=$(awk -F: -v g="$grp" '$1 == g {print $4}' /etc/group 2>/dev/null)
+    members=$(awk -F: -v g="$grp" '$1 == g {print $4}' /etc/group 2>/dev/null) || true
   fi
   if [ -n "$members" ]; then
     echo "  ${grp}: ${members}"
@@ -105,3 +105,5 @@ if command -v chage >/dev/null 2>&1; then
 else
   echo "  'chage' not available on this system, skipping."
 fi
+
+exit 0

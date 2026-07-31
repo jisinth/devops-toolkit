@@ -89,3 +89,5 @@ if [ -r /etc/shadow ]; then
 else
   log "  /etc/shadow not readable (need root), skipping."
 fi
+
+exit 0

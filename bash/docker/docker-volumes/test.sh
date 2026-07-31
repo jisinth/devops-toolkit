@@ -50,15 +50,18 @@ assert_output_contains "usage mentions --output" "--output" "$SCRIPT" --help
 assert_output_contains "unknown option is reported" "Unknown option" "$SCRIPT" --bogus
 
 if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
+  # Create the test volume first so at least one row (and therefore a
+  # header) is guaranteed even on a clean runner with no pre-existing
+  # volumes.
+  docker volume create "$TEST_VOLUME" >/dev/null
+  trap 'docker volume rm "$TEST_VOLUME" >/dev/null 2>&1 || true' EXIT
+
   assert_exit_code "default table report succeeds" 0 "$SCRIPT"
   assert_exit_code "--output csv succeeds" 0 "$SCRIPT" --output csv
   assert_exit_code "--output json succeeds" 0 "$SCRIPT" --output json
 
   assert_output_contains "table report has header" "MOUNTPOINT" "$SCRIPT"
   assert_output_contains "csv report has header" "Name,Driver,Mountpoint,Attached" "$SCRIPT" --output csv
-
-  docker volume create "$TEST_VOLUME" >/dev/null
-  trap 'docker volume rm "$TEST_VOLUME" >/dev/null 2>&1 || true' EXIT
 
   assert_output_contains "--unattached-only finds a real unattached volume" "$TEST_VOLUME" "$SCRIPT" --unattached-only
   assert_output_contains "unattached volume reported as attached:false in JSON" "\"attached\": false" "$SCRIPT" --unattached-only --output json
