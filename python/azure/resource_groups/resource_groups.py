@@ -16,7 +16,13 @@ from collections import Counter
 
 from azure.core.exceptions import ClientAuthenticationError, HttpResponseError
 from azure.identity import DefaultAzureCredential
-from azure.mgmt.resource import ResourceManagementClient
+
+try:
+    # azure-mgmt-resource >=26.0 split ResourceManagementClient out of the
+    # top-level azure.mgmt.resource package into this submodule.
+    from azure.mgmt.resource.resources import ResourceManagementClient
+except ImportError:
+    from azure.mgmt.resource import ResourceManagementClient
 
 FIELDNAMES = ["Name", "Location", "ResourceCount"]
 DETAILED_FIELDNAMES = ["Name", "Location", "ResourceType", "Count"]
