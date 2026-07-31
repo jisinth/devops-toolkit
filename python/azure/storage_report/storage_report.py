@@ -80,7 +80,7 @@ def print_table(headers, rows):
     for row in rows:
         for i, cell in enumerate(row):
             widths[i] = max(widths[i], len(str(cell)))
-    fmt = "  ".join("{:<%d}" % w for w in widths)
+    fmt = "  ".join(f"{{:<{w}}}" for w in widths)
     print(fmt.format(*headers))
     print(fmt.format(*("-" * w for w in widths)))
     for row in rows:

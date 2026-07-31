@@ -61,8 +61,8 @@ class TestCollectDatapoints(unittest.TestCase):
         import datetime
 
         fake_client = mock.Mock()
-        t1 = datetime.datetime(2026, 7, 31, 12, 0)
-        t2 = datetime.datetime(2026, 7, 31, 12, 5)
+        t1 = datetime.datetime(2026, 7, 31, 12, 0, tzinfo=datetime.timezone.utc)
+        t2 = datetime.datetime(2026, 7, 31, 12, 5, tzinfo=datetime.timezone.utc)
         fake_client.get_metric_statistics.return_value = {
             "Datapoints": [
                 {"Timestamp": t2, "Average": 50.0, "Unit": "Percent"},
@@ -90,7 +90,7 @@ class TestPrintTable(unittest.TestCase):
 class TestCLI(unittest.TestCase):
     def test_help_exits_zero(self):
         script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cloudwatch_report.py")
-        result = subprocess.run([sys.executable, script, "--help"], capture_output=True, text=True)
+        result = subprocess.run([sys.executable, script, "--help"], capture_output=True, text=True, check=False)
         self.assertEqual(result.returncode, 0)
         self.assertIn("--namespace", result.stdout)
         self.assertIn("--metric-name", result.stdout)

@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 """Unit tests for ebs_snapshot.py. No AWS credentials or network access required."""
-import csv
-import io
-import json
 import os
 import subprocess
 import sys
-import tempfile
 import unittest
 from unittest import mock
 
@@ -130,7 +126,7 @@ class TestCLI(unittest.TestCase):
     def test_help_exits_zero(self):
         script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ebs_snapshot.py")
         result = subprocess.run(
-            [sys.executable, script, "--help"], capture_output=True, text=True
+            [sys.executable, script, "--help"], capture_output=True, text=True, check=False
         )
         self.assertEqual(result.returncode, 0)
         self.assertIn("--create", result.stdout)

@@ -103,7 +103,7 @@ class TestCLI(unittest.TestCase):
     def test_help_exits_zero(self):
         script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "rds_report.py")
         result = subprocess.run(
-            [sys.executable, script, "--help"], capture_output=True, text=True
+            [sys.executable, script, "--help"], capture_output=True, text=True, check=False
         )
         self.assertEqual(result.returncode, 0)
         self.assertIn("--region", result.stdout)

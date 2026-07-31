@@ -2,7 +2,6 @@
 """Unit tests for iam_audit.py. No AWS credentials or network access required."""
 import csv
 import datetime
-import io
 import json
 import os
 import subprocess
@@ -56,7 +55,7 @@ class TestDaysSince(unittest.TestCase):
         self.assertEqual(mod.days_since(d, NOW), 30)
 
     def test_naive_date_treated_as_utc(self):
-        d = datetime.datetime(2026, 7, 1)
+        d = datetime.datetime(2026, 7, 1)  # noqa: DTZ001 - intentionally naive, exercises days_since's UTC fallback
         self.assertEqual(mod.days_since(d, NOW), 30)
 
 
@@ -208,7 +207,7 @@ class TestCLI(unittest.TestCase):
     def test_help_exits_zero(self):
         script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "iam_audit.py")
         result = subprocess.run(
-            [sys.executable, script, "--help"], capture_output=True, text=True
+            [sys.executable, script, "--help"], capture_output=True, text=True, check=False
         )
         self.assertEqual(result.returncode, 0)
         self.assertIn("--max-key-age-days", result.stdout)
